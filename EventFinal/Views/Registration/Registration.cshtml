@@ -1,0 +1,325 @@
+﻿@model EventFinal.Models.Registration;
+@{
+    Layout = null;
+}
+
+<!-- Custom fonts for this template-->
+<link href="~vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Create an account</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Registration">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-sm-12">
+                            If you already Create an account use that account to @Html.ActionLink("sign in", "Login", "Login")
+                            .
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-row">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Address" class="control-label"></label>
+                            <textarea asp-for="Address" class="form-control"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Country" class="control-label"></label>@{
+                                IEnumerable<SelectListItem> ctryList = (IEnumerable<SelectListItem>)TempData["country"];
+                            }
+                            <select id="ddlCountry" asp-for="Country" class="form-control" asp-items="ctryList">
+                            </select>
+                            <span asp-validation-for="Country" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="State" class="control-label"></label>@{
+                                IEnumerable<SelectListItem> _statelist = (IEnumerable<SelectListItem>)TempData["state"];
+                            }
+
+                            <select id="ddlState" asp-for="State" class="form-control" asp-items="_statelist"></select>
+                            <span asp-validation-for="State" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="City" class="control-label"></label>
+                            <select id="ddlCity" asp-for="City" class="form-control"></select>
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Mobileno" class="control-label"></label>
+                            <input asp-for="Mobileno" class="form-control" />
+                            <span asp-validation-for="Mobileno" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="EmailID" class="control-label"></label>
+                            <input asp-for="EmailID" class="form-control" />
+                            <span asp-validation-for="EmailID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Username" class="control-label"></label>
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Gender" class="control-label"></label>
+                            <select asp-for="Gender" class="form-control">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Birthdate" class="control-label"></label>
+                            <input asp-for="Birthdate" type="date" class="form-control" />
+                            <span asp-validation-for="Birthdate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="RoleID" class="control-label"></label>
+                            <select asp-for="RoleID" class="form-control">
+                                <option value="1">Admin</option>
+                                <option value="3">SuperAdmin</option>
+                                <option value="2">Customer</option>
+                            </select>
+                            <span asp-validation-for="RoleID" class="text-danger"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-12">
+                            <input id="Submit1" type="submit" value="Register" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ddlCountry").change(function () {
+                //var text = $(this).find("option:selected").text();
+                var val = $(this).val();
+                getStateByID(val);
+            });
+            $("#ddlState").change(function () {
+                //var text = $(this).find("option:selected").text();
+                var val = $(this).val();
+                getCityById(val);
+            });
+        });
+        function GetStatebyID(countryId) {
+            $.ajax({
+                type: 'GET',
+                url: "https://localhost:7083/Registration/Registration/GetState?Id=" + countryId,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                success: function (data) {
+                    PopulateDropDown("#ddlState", data);
+                },
+                error: function (eror, tur) {
+                    debugger
+                    alert("error");
+                }
+            });
+        }
+        function GetCitybyID(stateID) {
+            $.ajax({
+                type: 'GET',
+                url: "https://localhost:7083/Registration/Registration/GetCity?Id=" + stateID,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                success: function (data) {
+                    PopulateDropDown("#ddlCity", data);
+                },
+                error: function (eror, tur) {
+                    debugger
+                    alert("error");
+                }
+            });
+        }
+        function PopulateDropDown(dropDownId, list) {
+            if (list != null && list.length > 0) {
+                $(dropDownId).removeAttr("disabled");
+                $.each(list, function () {
+                    $(dropDownId).append($("<option></option>").val(this['value']).html(this['text']));
+                });
+            }
+        }
+    </script>
+}
+
+
+
+
+
+
+
+@*<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Login</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="~vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style>
+        .Register {
+            margin-left: 12px;
+            margin-top: 101px;
+        }
+    </style>
+
+</head>
+
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image">
+                                <img src="/img/undraw_profile_3.svg" alt="" class="Register">
+                                <h1 style="text-align: center;">Create Account</h1>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Add Registration!</h1>
+                                    </div>
+                                    <form class="user" asp-action="Registration" method="post">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" asp-for="Name" placeholder="Enter Your Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="Address" placeholder="Enter Your Address">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="City" placeholder="Enter Your City">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="State" placeholder="Enter Your State">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="Country" placeholder="Enter Your Country">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="Mobileno" placeholder="Enter Your Mobile number">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" id="exampleInputPassword" asp-for="EmailID" placeholder="Enter Your Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="Username" placeholder="Enter Your Username">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user" id="exampleInputPassword" asp-for="Password" placeholder="Enter Your Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user" id="exampleInputPassword" asp-for="ConfirmPassword" placeholder="Confirm Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="Gender" placeholder="Enter Your Gender">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="date" class="form-control form-control-user" id="exampleInputPassword" asp-for="Birthdate" placeholder="Enter Your Birthdate">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" id="exampleInputPassword" asp-for="RoleID" placeholder="Enter Your RoleID">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">
+                                                    Remember
+                                                    Me
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" href="index.html" class="btn btn-primary btn-user btn-block">
+                                            Login
+                                        </button>
+                                        <hr>
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="register.html">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>*@
+
+

@@ -1,0 +1,62 @@
+﻿@using EventFinal
+@model IEnumerable<Equipment>
+
+@{
+    ViewData["Title"] = "ShowEquipment";
+}
+
+<h1>ShowEquipment</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentName)
+            </th>
+            @*    <th>
+            @Html.DisplayNameFor(model => model.VenueFilename)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.VenueFilePath)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.Createdby)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.Createdate)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.EquipmentCost)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EquipmentCost)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "VenueEdit", new {  id=item.EquipmentID }) |
+                    @Html.ActionLink("Details", "EquipmentDetails", new {  id=item.EquipmentID  }) |
+                    @Html.ActionLink("Delete", "VenueDelete", new {  id=item.EquipmentID  })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
